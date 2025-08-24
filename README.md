@@ -1,3 +1,4 @@
 # AT89C51_Projects
 This project is based on the AT89C51 microcontroller and the Proteus simulation system. It specifically includes a 60-second microcontroller-based stopwatch timer, a simple electronic piano design, and an LED billboard display using the microcontroller. The electronic piano project covers three octaves and is capable of playing music. The array storing music information contains both musical notes and their duration times. The billboard project includes Chinese character font generation software, and the displayed content can be altered by modifying the Chinese character array.
+
 There is an error in the simulation file under the electronic piano project folder. You can manually connect the circuit according to the port settings in the program: connect the P1 series ports to eight buttons respectively (connected to ground potential), and connect the P2.0 port to the sounder.
