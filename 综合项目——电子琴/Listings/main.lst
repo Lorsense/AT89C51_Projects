@@ -1,0 +1,211 @@
+C51 COMPILER V9.54   MAIN                                                                  08/17/2025 17:47:09 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          unsigned int code table[]=
+   4          {
+   5                  63628,63731,63835,63928,64021,64103,64185,64260,64331,64400,64463,64528,        //低音区  0——11
+   6                  64580,64633,64684,64732,64777,64820,64860,64898,64934,64968,65000,65030,        //中音区  12——23
+   7                  65058,65085,65110,65134,65157,65178,65198,65217,65235,65252,65268,65283,        //高音区  24——35
+   8            // Do   Do(u)  Re   Re(u)   Mi    Fa  Fa(u)  So   So(u)   La   La(u)  Si 
+   9          };
+  10          
+  11          //四分音符规定为400ms
+  12          unsigned int code music1[][2] =
+  13          {
+  14                  12,4,   12,4,   19,4,   19,4,   21,4,   21,4,   19,8,
+  15                  17,4,   17,4,   16,4,   16,4,   14,4,   14,4,   12,8,
+  16                  19,4,   19,4,   17,4,   17,4,   16,4,   16,4,   14,8,
+  17                  19,4,   19,4,   17,4,   17,4,   16,4,   16,4,   14,8,
+  18                  12,4,   12,4,   19,4,   19,4,   21,4,   21,4,   19,8,
+  19                  17,4,   17,4,   16,4,   16,4,   14,4,   14,4,   12,8,
+  20          
+  21          0xff
+  22          };
+  23          
+  24          unsigned int code music2[][2] =
+  25          {
+  26                  7,2,   7,2,   9,4,   7,4,   12,4,   11,8,
+  27                  7,2,   7,2,   9,4,   7,4,   14,4,   12,8,
+  28                  7,2,   7,2,   19,4,  16,4,  12,4,   11,4,   9,4,
+  29                  17,4,  17,4,  16,4,  12,4,   14,4,   12,8,
+  30          0xff
+  31                  
+  32          };
+  33          /*
+  34          1 2
+  35          4 2
+  36          5 2
+  37          7 2
+  38          */
+  39          
+  40          void Init();
+  41          void key_scan();
+  42          void delay100ms(unsigned int z);
+  43          
+  44          sbit fmq = P2^0;
+  45          sbit KEY1 = P1^0;
+  46          sbit KEY2 = P1^1;
+  47          sbit KEY3 = P1^2;
+  48          sbit KEY4 = P1^3;
+  49          sbit KEY5 = P1^4;
+  50          sbit KEY6 = P1^5;
+  51          sbit KEY7 = P1^6;
+  52          sbit KEY8 = P1^7;
+  53          unsigned int temp1,temp2,n;             //存储TH0和TL0的取值
+  54          
+C51 COMPILER V9.54   MAIN                                                                  08/17/2025 17:47:09 PAGE 2   
+
+  55          void main()
+  56          {
+  57   1              Init();
+  58   1              while(1)
+  59   1              {
+  60   2                      key_scan();
+  61   2              }
+  62   1      }
+  63          
+  64          void key_scan()
+  65          {
+  66   1              if(KEY1 == 0)
+  67   1              {
+  68   2                      temp1 = table[12]/256;
+  69   2                      temp2 = table[12]%256;
+  70   2                      TH0 = temp1;
+  71   2                      TL0 = temp2;
+  72   2                      TR0 = 1;                //使能定时器，开始演奏
+  73   2                      while(KEY1 == 0);
+  74   2                      delay100ms(2);
+  75   2              }
+  76   1                      if(KEY2 == 0)
+  77   1              {
+  78   2                      temp1 = table[14]/256;
+  79   2                      temp2 = table[14]%256;
+  80   2                      TH0 = temp1;
+  81   2                      TL0 = temp2;
+  82   2                      while(KEY2 == 0);
+  83   2                      TR0 = 1;                //使能定时器，开始演奏
+  84   2                      delay100ms(2);
+  85   2              }
+  86   1                      if(KEY3 == 0)
+  87   1              {
+  88   2                      temp1 = table[16]/256;
+  89   2                      temp2 = table[16]%256;
+  90   2                      TH0 = temp1;
+  91   2                      TL0 = temp2;
+  92   2                      while(KEY3 == 0);
+  93   2                      TR0 = 1;                //使能定时器，开始演奏
+  94   2                      delay100ms(2);
+  95   2              }
+  96   1                      if(KEY4 == 0)
+  97   1              {
+  98   2                      temp1 = table[17]/256;
+  99   2                      temp2 = table[17]%256;
+ 100   2                      TH0 = temp1;
+ 101   2                      TL0 = temp2;
+ 102   2                      while(KEY4 == 0);
+ 103   2                      TR0 = 1;                //使能定时器，开始演奏
+ 104   2                      delay100ms(2);
+ 105   2              }
+ 106   1                      if(KEY5 == 0)
+ 107   1              {
+ 108   2                      temp1 = table[19]/256;
+ 109   2                      temp2 = table[19]%256;
+ 110   2                      TH0 = temp1;
+ 111   2                      TL0 = temp2;
+ 112   2                      while(KEY5 == 0);
+ 113   2                      TR0 = 1;                //使能定时器，开始演奏
+ 114   2                      delay100ms(2);
+ 115   2              }
+ 116   1              if(KEY6 == 0)
+C51 COMPILER V9.54   MAIN                                                                  08/17/2025 17:47:09 PAGE 3   
+
+ 117   1              {
+ 118   2                      temp1 = table[21]/256;
+ 119   2                      temp2 = table[21]%256;
+ 120   2                      TH0 = temp1;
+ 121   2                      TL0 = temp2;
+ 122   2                      while(KEY6 == 0);
+ 123   2                      TR0 = 1;                //使能定时器，开始演奏
+ 124   2                      delay100ms(2);
+ 125   2              }
+ 126   1              if(KEY7 == 0)
+ 127   1              {
+ 128   2                      temp1 = table[23]/256;
+ 129   2                      temp2 = table[23]%256;
+ 130   2                      TH0 = temp1;
+ 131   2                      TL0 = temp2;
+ 132   2                      while(KEY7 == 0);
+ 133   2                      TR0 = 1;                //使能定时器，开始演奏
+ 134   2                      delay100ms(2);
+ 135   2              }
+ 136   1                      if(KEY8 == 0)
+ 137   1                      {
+ 138   2                              while(1)
+ 139   2                              {
+ 140   3                                      temp1 = table[music2[n][0]]/256;
+ 141   3                                      temp2 = table[music2[n][0]]%256;
+ 142   3                                      TH0 = temp1;
+ 143   3                                      TL0 = temp2;
+ 144   3                                      while(KEY7 == 0);
+ 145   3                                      TR0 = 1;
+ 146   3                                      delay100ms(music2[n][1]);
+ 147   3                                      n++;
+ 148   3                                      if(music2[n][0] == 0xff)
+ 149   3                                      {
+ 150   4                                              TR0 = 0;
+ 151   4                                              n = 0;
+ 152   4                                              break;
+ 153   4                                      }
+ 154   3                              }
+ 155   2                      }
+ 156   1              TR0 = 0;
+ 157   1      }
+ 158          
+ 159          void Init()
+ 160          {
+ 161   1              TMOD = 0x01;
+ 162   1              EA = 1;
+ 163   1              ET0 = 1;
+ 164   1      }
+ 165          
+ 166          void delay100ms(unsigned int z)
+ 167          {
+ 168   1              unsigned int i;
+ 169   1              z++;
+ 170   1              while(--z)
+ 171   1              {
+ 172   2                      for(i = 11502;i;i--);
+ 173   2              }
+ 174   1      }
+ 175          
+ 176          void timer() interrupt 1
+ 177          {
+ 178   1              TH0 = temp1;
+C51 COMPILER V9.54   MAIN                                                                  08/17/2025 17:47:09 PAGE 4   
+
+ 179   1              TL0 = temp2;
+ 180   1              fmq = ~fmq;
+ 181   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    473    ----
+   CONSTANT SIZE    =    348    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

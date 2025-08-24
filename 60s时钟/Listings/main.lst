@@ -1,0 +1,137 @@
+C51 COMPILER V9.54   MAIN                                                                  08/15/2025 01:43:11 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>  // 51单片机寄存器定义头文件
+   2          
+   3          unsigned int num,flag,flag1,gewei,shiwei;
+   4          
+   5          sbit LED = P1^0;
+   6          sbit key = P3^2;
+   7          
+   8          void Init();
+   9          void delay();
+  10          void scan();
+  11          void delay_ms(unsigned int ms);
+  12          
+  13          unsigned char code leddata[] = 
+  14          {
+  15                  0xc0, //0
+  16                  0xf9,  //1
+  17                  0xa4,  //2
+  18                  0xb0,  //3
+  19                  0x99,  //4
+  20                  0x92,  //5
+  21                  0x82,  //6
+  22                  0xf8,  //7
+  23                  0x80,  //8
+  24                  0x90   //9
+  25          };
+  26          
+  27          void xianshi(unsigned int i,unsigned int j)
+  28          {
+  29   1              gewei = flag1%10;
+  30   1              shiwei = flag1/10;
+  31   1              P2 = 0x02;
+  32   1              P0 = leddata[i];
+  33   1              delay_ms(2);
+  34   1              P2 = 0x01;
+  35   1              P0 = leddata[j];
+  36   1              delay_ms(2);
+  37   1      }
+  38          
+  39          void main()
+  40          {
+  41   1              Init();
+  42   1              while(1)
+  43   1              {
+  44   2                      xianshi(gewei,shiwei);
+  45   2              }
+  46   1      }
+  47          
+  48          void scan()
+  49          {
+  50   1              if (key == 0)
+  51   1              {       
+  52   2                      while(1)
+  53   2                      {
+  54   3                              if (key == 1)
+C51 COMPILER V9.54   MAIN                                                                  08/15/2025 01:43:11 PAGE 2   
+
+  55   3                              {
+  56   4                                      num++;
+  57   4                                      break;
+  58   4                              }
+  59   3                      }
+  60   2      
+  61   2              }
+  62   1      }
+  63          
+  64          void delay()
+  65          {
+  66   1              unsigned int i,j;
+  67   1              for( i = 20000;i>1;i--)
+  68   1              for( j =6000;j>1;j--);
+  69   1      }
+  70          
+  71          void delay_ms(unsigned int ms)
+  72          {
+  73   1          unsigned int i, j;
+  74   1          for(i = 0; i < ms; i++)
+  75   1              for(j = 0; j < 123; j++); // 粗略延时 1ms（12MHz 晶振）
+  76   1      }
+  77          
+  78          void Init()
+  79          {
+  80   1              EA = 1;         //开启总中断    
+  81   1              ET0 = 1;        //使能定时器中断
+  82   1              TR0 = 1;        //开启定时器0
+  83   1              
+  84   1              TMOD = 0x01;    //设置工作模式
+  85   1              TH0 = (65535 - 50000)/256;
+  86   1              TL0 =(65535 - 50000)%256;
+  87   1              LED = 0;
+  88   1      }
+  89          
+  90          void timer0() interrupt 1
+  91          {
+  92   1              TH0 = (65535 - 50000)/256;
+  93   1              TL0 =(65535 - 50000)%256;
+  94   1              flag++;
+  95   1              if(flag == 20)
+  96   1              {
+  97   2                      flag = 0;
+  98   2                      flag1++;                //总时间
+  99   2              }
+ 100   1                      //尽量不要把延时函数放到定时中断里影响计时时间
+ 101   1                      if(flag1 == 60)
+ 102   1                      {
+ 103   2                              LED = 1;
+ 104   2                              EA = 0;
+ 105   2                              TH0 = (65535 - 50000)/256;      //为了不丢失定时器的计数值
+ 106   2                              TL0 =(65535 - 50000)%256;
+ 107   2                      }
+ 108   1              
+ 109   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    255    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  08/15/2025 01:43:11 PAGE 3   
+
+   DATA SIZE        =     10       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
